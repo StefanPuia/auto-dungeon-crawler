@@ -1,0 +1,138 @@
+:root {
+    --tile-size: 64px;
+    --tile-gap: 0;
+}
+
+#spinner {
+    position: fixed;
+    z-index: 3000;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    display: none;
+    opacity: 0.9;
+    justify-content: center;
+    align-items: center;
+}
+
+#spinner img {
+    width: 60px;
+    height: 60px;
+}
+
+body {
+    font-family: fantasy;
+    display: flex;
+    justify-content: center;
+    background: rgb(15, 15, 15);
+}
+
+#game {
+    display: grid;
+    grid-template-rows: auto var(--tile-size) 40px;
+    grid-template-areas: "board""stats""button";
+    width: calc(calc(5 * var(--tile-size)) + calc(4 * var(--tile-gap)));
+}
+
+#board {
+    grid-area: board;
+    display: grid;
+    grid-template-columns: repeat(5, var(--tile-size));
+    grid-template-rows: repeat(7, var(--tile-size));
+    grid-gap: var(--tile-gap);
+}
+
+#stats {
+    grid-area: stats;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 24px;
+}
+
+#button {
+    grid-area: button;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: black;
+    background: lightblue;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+#stats>div {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+#attack {
+    background-color: gray;
+    color: white;
+}
+
+#health {
+    background-color: tomato;
+    color: white;
+}
+
+#gold {
+    background-color: yellow;
+    color: black;
+}
+
+
+.boardTile {
+    display: flex;
+    width: var(--tile-size);
+    height: var(--tile-size);
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+    font-size: 23px;
+}
+
+.boardTile.monster,
+.boardTile.gold,
+.boardTile.fountain,
+.boardTile.entrance,
+.boardTile.exit,
+.boardTile.attack,
+.boardTile.potion {
+    background-image: url("/tiles.jpg");
+    position: relative;
+}
+
+.boardTile.wall,
+.boardTile.floor,
+.boardTile.boulder {
+    background-image: url("/tiles2.png");
+    background-size: 1024px 1024px;
+}
+
+.boardTile.potion,
+.boardTile.attack,
+.boardTile.gold {
+    color: white
+}
+
+.monster .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    justify-items: center;
+    bottom: 0;
+    position: absolute;
+}
+
+.monster .stats .attack {
+    color: blue;
+}
+
+.monster .stats .health {
+    color: red;
+}
