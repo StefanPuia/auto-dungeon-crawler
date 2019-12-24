@@ -1,0 +1,13 @@
+common:
+- keep all potions until the end of the round or when needed
+- use fountain before potions
+- pick up money, attack and crystals whenever
+- when finding a bomb, clear all 8 tiles around it
+
+greedy:
+- clear every available spot first
+- kill the monster blocking the most tiles
+
+bomberman:
+- clear the tiles with most adjacent tiles
+- kill any monster that appears while clearing
