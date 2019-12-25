@@ -91,7 +91,7 @@ body {
     height: var(--tile-size);
     user-select: none;
     cursor: pointer;
-    background-image: url("/tiles.png");
+    background-image: url("/static/tiles.png");
     position: relative;
     z-index: 10;
 }
@@ -125,7 +125,7 @@ body {
     width: var(--tile-size);
     height: var(--tile-size);
     cursor: pointer;
-    background-image: url("/tiles.png");
+    background-image: url("/static/tiles.png");
     position: relative;
     z-index: 5;
     left: 0;

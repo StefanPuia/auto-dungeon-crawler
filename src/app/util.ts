@@ -1,6 +1,8 @@
 import { GameObject, SpritePosition } from "./game/board/object";
 
 export class Util {
+    public static readonly charSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
     public static array(n: number) {
         const array = [];
         for(let i = 0; i < n; i++) {
@@ -51,6 +53,14 @@ export class Util {
             }
         }
         return positions;
+    }
+
+    public static randHash(length: number) {
+        const out: Array<string> = [];
+        for (let i = 0; i < length; i++) {
+            out.push(Util.randItem(Util.charSet));
+        }
+        return out.join("");
     }
 }
 

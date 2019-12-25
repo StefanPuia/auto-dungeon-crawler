@@ -6,10 +6,10 @@ export class Entrance extends GameObject {
     protected sprite: SpritePosition = [42, 15];
     private floor: Floor;
 
-    constructor(pos: Position) {
-        super();
+    constructor(key: string, pos: Position) {
+        super(key);
         this.position = pos;
-        this.floor = new Floor(pos);
+        this.floor = new Floor(this.gameKey, pos);
     }
 
     public click() { }

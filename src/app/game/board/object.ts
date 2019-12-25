@@ -1,6 +1,11 @@
 export abstract class GameObject {
     protected abstract position: Position;
     protected abstract sprite: SpritePosition;
+    protected gameKey: string;
+
+    constructor(key: string) {
+        this.gameKey = key;
+    } 
 
     abstract click(): void;
     abstract getDisplay(): string;

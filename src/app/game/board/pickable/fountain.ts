@@ -1,23 +1,24 @@
 import { Position, SpritePosition } from "../object";
-import { Player } from "../../player";
-import { Game } from "../../game";
 import { Pickable } from "../pickable";
+import { GameFactory } from "../../game.factory";
 
 export class Fountain extends Pickable {
     protected position: Position;
     protected sprite: SpritePosition = [20, 11];
 
-    constructor(pos: Position) {
-        super(pos);
+    constructor(key: string, pos: Position) {
+        super(key, pos);
         this.position = pos;
     }
 
     public click() {
         super.click();
-        if (Player.getHealth() - Player.getBaseHealth()) {
-            Player.setHealth(Player.getBaseHealth() + Game.getModifier() * 5)
+        const game = GameFactory.get(this.gameKey);
+        const player = GameFactory.get(this.gameKey).getPlayer();
+        if (player.getHealth() - player.getBaseHealth()) {
+            player.setHealth(player.getBaseHealth() + game.getModifier() * 5)
         } else {
-            Player.setHealth(Game.getModifier() * 23, 1)
+            player.setHealth(game.getModifier() * 23, 1)
         }
     }
     public onload() { }

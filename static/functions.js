@@ -1,5 +1,7 @@
 'use strict';
 
+const gameKey = getParameterValue("play");
+
 /**
  * make a fetch call to the server
  * @param  {String}   fetchURL      fetch URL
@@ -92,8 +94,19 @@ function waitSpinner(show = true) {
     }
 }
 
+function getParameterValue(param, path) {
+    path = !!path ? path : location.pathname;
+    let parts = escape(path).split('/');
+    for (let i = 0; i < parts.length; i++) {
+        if (parts[i] == param && parts.length > i) {
+            return parts[i + 1];
+        }
+    }
+    return undefined;
+}
+
 function loadBoard() {
-    callServer("/game/getData")
+    callServer(`/game/${gameKey}/getData`)
     .then(renderBoard).catch(console.error);
 }
 
@@ -142,10 +155,10 @@ function sprite(tileData) {
 
 function handleTileClick(tile) {
     const pos = tile.data("position");
-    callServer(`/game/click/${pos.x}/${pos.y}`, {spinner: false})
+    callServer(`/game/${gameKey}/click/${pos.x}/${pos.y}`, {spinner: false})
     .then(renderBoard).catch(console.error);
 }
 
 function startGame() {
-    callServer("/game/start").then(renderBoard).catch(console.error);
+    callServer(`/game/${gameKey}/start`).then(renderBoard).catch(console.error);
 }
