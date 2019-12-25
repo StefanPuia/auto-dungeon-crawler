@@ -1,17 +1,17 @@
 import { GameObject, Position } from "./object";
 import { Floor } from "./environment/floor";
-import { Board } from "../board";
+import { GameFactory } from "../game.factory";
 
 export abstract class Pickable extends GameObject {
     protected floor: Floor;
 
-    constructor(position: Position) {
-        super();
-        this.floor = new Floor(position);
+    constructor(key: string, position: Position) {
+        super(key);
+        this.floor = new Floor(key, position);
     }
     
     public click() {
-        Board.setObject(this.floor);
+        GameFactory.get(this.gameKey).getBoard().setObject(this.floor);
     }
 
     public getData(): any {

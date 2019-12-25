@@ -1,6 +1,5 @@
 import { GameObject, Position, SpritePosition } from "../object";
-import { Util } from "../../../util";
-import { Game } from "../../game";
+import { GameFactory } from "../../game.factory";
 
 export class Exit extends GameObject {
     protected position: Position;
@@ -8,14 +7,14 @@ export class Exit extends GameObject {
     protected closedSprite: SpritePosition = [25, 42];
     private locked: boolean = true;
 
-    constructor(pos: Position) {
-        super();
+    constructor(key: string, pos: Position) {
+        super(key);
         this.position = pos;
     }
 
     public click() {
         if (!this.locked) {
-            Game.nextLevel();
+            GameFactory.get(this.gameKey).nextLevel();
         }
     }
 

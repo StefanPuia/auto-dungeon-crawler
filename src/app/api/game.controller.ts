@@ -1,21 +1,24 @@
-import { Request, Response, Router } from 'express';
-import { Game } from '../game/game';
+import { Request, Response, Router, NextFunction } from 'express';
+import { GameFactory } from '../game/game.factory';
 
 const gameController: Router = Router();
 
-gameController.get("/getData", (req: Request, res: Response) => {
-    res.json(Game.getData());
+gameController.get("/:game/getData", (req: Request, res: Response) => {
+    const game = GameFactory.get(req.params.game);
+    res.json(game.getData());
 });
 
-gameController.get("/click/:x/:y", (req: Request, res: Response) => {
-    Game.handleClick({x: parseInt(req.params.x), y: parseInt(req.params.y)});
-    res.json(Game.getData());
+gameController.get("/:game/click/:x/:y", (req: Request, res: Response) => {
+    const game = GameFactory.get(req.params.game);
+    game.handleClick({x: parseInt(req.params.x), y: parseInt(req.params.y)});
+    res.json(game.getData());
 });
 
-gameController.get("/start", (req: Request, res: Response) => {
-    Game.stop();
-    Game.start();
-    res.json(Game.getData());
+gameController.get("/:game/start", (req: Request, res: Response) => {
+    const game = GameFactory.get(req.params.game);
+    game.stop();
+    game.start();
+    res.json(game.getData());
 });
 
 export { gameController };

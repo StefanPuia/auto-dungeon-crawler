@@ -1,21 +1,22 @@
 import { Position, SpritePosition } from "../object";
 import { Util } from "../../../util";
 import { Player } from "../../player";
-import { Game } from "../../game";
 import { Pickable } from "../pickable";
+import { GameFactory } from "../../game.factory";
 
 export class Attack extends Pickable {
     protected position: Position;
     protected sprite: SpritePosition = [21, 28];
     private readonly amount: number;
 
-    constructor(pos: Position);
-    constructor(pos: Position, amount: number);
-    constructor(pos: Position, amount: number | undefined = undefined) {
-        super(pos);
+    constructor(key: string, pos: Position);
+    constructor(key: string, pos: Position, amount: number);
+    constructor(key: string, pos: Position, amount: number | undefined = undefined) {
+        super(key, pos);
+        const game = GameFactory.get(key);
 
         if (!amount) {
-            amount = Util.randInt(Game.getModifier() * 1.1, Game.getModifier() * 1);
+            amount = Util.randInt(game.getModifier() * 1.1, game.getModifier() * 1);
         }
 
         this.position = pos;
@@ -24,7 +25,7 @@ export class Attack extends Pickable {
 
     public click() {
         super.click();
-        Player.setAttack(this.amount, 1);
+        GameFactory.get(this.gameKey).getPlayer().setAttack(this.amount, 1);
     }
     public onload() { }
 

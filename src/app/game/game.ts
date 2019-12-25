@@ -13,104 +13,111 @@ import { Attack } from "./board/pickable/attack";
 import { Key } from "./board/pickable/key";
 
 export class Game {
-    private static instance: Game;
     private level: number = 1;
     private running: boolean = false;
+    private key: string;
+    private board: Board;
+    private player: Player;
 
-    private constructor() {}
-
-    private static get(): Game {
-        if (!this.instance) {
-            this.instance = new Game();
-        }
-        return this.instance;
+    constructor(key: string) {
+        this.key = key;
+        this.board = new Board(key);
+        this.player = new Player(key);
     }
 
-    public static stop() {
-        if (Game.get().running) {
-            Game.get().running = false;
+    public stop() {
+        if (this.running) {
+            this.running = false;
         }
     }
 
-    public static start() {
-        if (Game.get().running) return;
+    public start() {
+        if (this.running) return;
 
-        Game.get().level = 1;
-        Player.setHealth(20);
-        Player.setAttack(3);
-        Player.setGold(0);
-        Player.setInitiative(20);
+        this.level = 1;
+        this.player.setHealth(20);
+        this.player.setAttack(3);
+        this.player.setGold(0);
+        this.player.setInitiative(20);
         
         this.newBoard();
-        Game.get().running = true;
+        this.running = true;
     }
 
-    public static nextLevel() {
-        Game.get().level++;
+    public nextLevel() {
+        this.level++;
         this.newBoard();
     }
 
-    public static newBoard() {
-        Board.reset();
+    public getBoard() {
+        return this.board;
+    }
 
-        const entrancePos = Board.randomEmptyPosition();
+    public getPlayer() {
+        return this.player;
+    }
+
+    public newBoard() {
+        delete this.board;
+        this.board = new Board(this.key);
+
+        const entrancePos = this.board.randomEmptyPosition();
         if (entrancePos) {
-            Board.setObject(new Entrance(entrancePos));
+            this.board.setObject(new Entrance(this.key, entrancePos));
         }
 
-        const exitPos = Board.randomEmptyPosition();
+        const exitPos = this.board.randomEmptyPosition();
         if (exitPos) {
-            Board.setObject(new Wall(new Exit(exitPos)));
+            this.board.setObject(new Wall(this.key, new Exit(this.key, exitPos)));
         }
 
-        const monsters: Array<Monster> = [];
         for (let i = 0; i < Util.randInt(20, 10); i++) {
-            const pos = Board.randomEmptyPosition();
+            const pos = this.board.randomEmptyPosition();
             if (pos) {
-                Board.setObject(new Wall(new Monster(pos)));
+                this.board.setObject(new Wall(this.key, new Monster(this.key, pos)));
             }
         }
 
-        const keyMonster = Util.randItem(Board.getAllItems(Monster, true));
-        keyMonster.overrideLoot(new Key(keyMonster.getPosition()));
+        const keyMonster = Util.randItem(this.board.getAllItems(Monster, true));
+        keyMonster.overrideLoot(new Key(this.key, keyMonster.getPosition()));
 
-        for (const pos of Board.emptyPositions()) {
-            Board.setObject(new Wall(Util.rollReward([{
-                object: new Gold(pos),
+        for (const pos of this.board.emptyPositions()) {
+            this.board.setObject(new Wall(this.key, Util.rollReward([{
+                object: new Gold(this.key, pos),
                 rate: 6
             }, {
-                object: new Attack(pos),
+                object: new Attack(this.key, pos),
                 rate: 2
             }, {
-                object: new Fountain(pos),
+                object: new Fountain(this.key, pos),
                 rate: 0.2
-            }], 100) || new Floor(pos)));
+            }], 100) || new Floor(this.key, pos)));
         }
     }
 
-    public static handleClick(position: Position) {
-        if (Game.get().running) {
-            Board.handleClick(position);
+    public handleClick(position: Position) {
+        if (this.running) {
+            this.board.handleClick(position);
         }
     }
 
-    public static getData(): any {
+    public getData(): any {
         const gameData: any = {
-            player: Player.getData(),
-            board: Board.getData(),
-            running: Game.get().running,
-            level: Game.get().level,
-            modifier: Game.getModifier()
+            player: this.player.getData(),
+            board: this.board.getData(),
+            running: this.running,
+            level: this.level,
+            modifier: this.getModifier()
         };
-        if (Game.get().running && Player.getHealth() === 0) {
+        if (this.running && this.player.getHealth() === 0) {
             gameData.message = "Game Over: You Died";
         }
         return gameData;
     }
 
-    public static getModifier(): number {
-        return 1 + (Game.get().level / 10)
-            + Math.floor(Game.get().level / 5)
-            + Math.floor(Game.get().level / 10);
+    public getModifier(): number {
+        return 1 + (this.level / 10)
+            + Math.floor(this.level / 5)
+            + Math.floor(this.level / 10);
     }
 }

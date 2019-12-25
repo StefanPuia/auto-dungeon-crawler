@@ -7,8 +7,8 @@ export class Floor extends GameObject {
 
     public static readonly sprites: Array<SpritePosition> = Util.spriteMap(25, 14, 34, 14)
 
-    constructor(pos: Position) {
-        super();
+    constructor(key: string, pos: Position) {
+        super(key);
         this.position = pos;
         this.sprite = Util.randItem(Floor.sprites);
     }

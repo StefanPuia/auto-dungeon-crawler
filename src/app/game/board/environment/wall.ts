@@ -1,11 +1,11 @@
 import { GameObject, Position, SpritePosition } from "../object";
-import { Board } from "../../board";
 import { Util } from "../../../util";
 import { Monster } from "../enitity/monster";
 import { Entrance } from "../enitity/entrance";
 import { Floor } from "./floor";
 import { Pickable } from "../pickable";
 import { Exit } from "../enitity/exit";
+import { GameFactory } from "../../game.factory";
 
 export class Wall extends GameObject {
     protected position: Position;
@@ -19,8 +19,8 @@ export class Wall extends GameObject {
     public static readonly lockedSprites: Array<SpritePosition> = Util.spriteMap(7, 13, 13, 13);
     public static readonly unclickableSprites: Array<SpritePosition> = Util.spriteMap(41, 12, 52, 12);
 
-    constructor(contains: GameObject) {
-        super();
+    constructor(key: string, contains: GameObject) {
+        super(key);
         this.position = contains.getPosition();
         this.contains = contains;
         this.sprite = Util.randItem(Wall.sprites);
@@ -30,13 +30,13 @@ export class Wall extends GameObject {
 
     public click() {
         if (!this.locked && this.clickable()) {
-            Board.setObject(this.contains);
+            GameFactory.get(this.gameKey).getBoard().setObject(this.contains);
         }
     }
     public onload() { }
 
     private clickable(): boolean {
-        for (const obj of Board.getSurrounding(this.position, false)) {
+        for (const obj of GameFactory.get(this.gameKey).getBoard().getSurrounding(this.position, false)) {
             if (obj instanceof Entrance || obj instanceof Exit
                     || obj instanceof Floor || obj instanceof Pickable) {
                 return true;
@@ -63,7 +63,7 @@ export class Wall extends GameObject {
 
     public unlock() {
         let monsters = 0;
-        Board.getSurrounding(this.position).forEach(obj => {
+        GameFactory.get(this.gameKey).getBoard().getSurrounding(this.position).forEach(obj => {
             if (obj instanceof Monster) monsters++;
         })
 

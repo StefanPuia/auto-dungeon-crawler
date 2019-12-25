@@ -7,8 +7,8 @@ export class Boulder extends GameObject {
 
     public static readonly sprites: Array<SpritePosition> = Util.spriteMap(29, 13, 36, 13);
 
-    constructor(pos: Position) {
-        super();
+    constructor(key: string, pos: Position) {
+        super(key);
         this.position = pos;
         this.sprite = Util.randItem(Boulder.sprites);
     }
