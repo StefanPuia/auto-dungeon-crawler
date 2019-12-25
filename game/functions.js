@@ -103,23 +103,29 @@ function renderBoard(data) {
     $("#gold").text(data.player.gold);
 
     $("#board").html("");
-    for(let i = 0; i < 7; i++) {
-        for (let j = 0; j < 5; j++) {
+    for(let i = 0; i < 14; i++) {
+        for (let j = 0; j < 10; j++) {
             const tileData = data.board[i][j];
             const tile = $(`<div class="boardTile"/>`);
             tile.data("position", {x: i, y: j});
             tile.addClass(tileData.type);
-            tile.text(tileData.display || "");
-            if (data.running === true) tile.on("click", () => { handleTileClick(tile); });
+            tile.append($(`<span class="display">${tileData.display || ""}</span>`));
+            if (data.running === true) {
+                tile.on("click", () => { handleTileClick(tile); });
+            }
             if (tileData.type === "monster") {
                 const stats = $("<div class='stats'></div>");
                 stats.append($(`<div class="attack">${tileData.extra.attack}</div>`));
                 stats.append($(`<div class="health">${tileData.extra.health}</div>`));
                 tile.append(stats);
             }
-            tile.css({
-                "background-position": `-${tileData.sprite[0] * 64}px -${tileData.sprite[1] * 64}px`
-            });
+            tile.css({ "background-position": sprite(tileData) });
+            if (tileData.layer) {
+                const layer = $("<div class='layer'></div>");
+                tile.css({ "background-position": sprite(tileData.layer) });
+                layer.css({ "background-position": sprite(tileData) });
+                tile.append(layer);
+            }
             $("#board").append(tile);
             $("#button").text(data.level + " / " + data.modifier);
         }
@@ -128,6 +134,10 @@ function renderBoard(data) {
     if(data.message) {
         setTimeout(() => { alert(data.message); }, 5)
     }
+}
+
+function sprite(tileData) {
+    return `-${tileData.sprite[0] * 32}px -${tileData.sprite[1] * 32}px`
 }
 
 function handleTileClick(tile) {

@@ -4,8 +4,8 @@ import { Game } from "../../game";
 
 export class Exit extends GameObject {
     protected position: Position;
-    protected spritePosition: SpritePosition = [7, 10];
-    protected closedSpritePosition: SpritePosition = [8, 10];
+    protected sprite: SpritePosition = [4, 45];
+    protected closedSprite: SpritePosition = [25, 42];
     private locked: boolean = true;
 
     constructor(pos: Position) {
@@ -36,7 +36,7 @@ export class Exit extends GameObject {
     public getData() {
         return {
             type: "exit",
-            sprite: this.locked ? this.closedSpritePosition : this.spritePosition
+            sprite: this.locked ? this.closedSprite : this.sprite
         }
     }
 }

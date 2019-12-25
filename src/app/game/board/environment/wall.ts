@@ -9,23 +9,23 @@ import { Exit } from "../enitity/exit";
 
 export class Wall extends GameObject {
     protected position: Position;
-    protected spritePosition: SpritePosition;
-    protected lockedSpritePosition: SpritePosition;
-    protected unclickableSpritePosition: SpritePosition;
+    protected sprite: SpritePosition;
+    protected lockedSprite: SpritePosition;
+    protected unclickableSprite: SpritePosition;
     private contains: GameObject;
     private locked: boolean = false;
 
-    public static readonly sprites: Array<SpritePosition> = Util.array(10).map((x, i) => { return [i+1, 3] });
-    public static readonly lockedSprites: Array<SpritePosition> = Util.array(6).map((x, i) => { return [i+1, 11] });
-    public static readonly unclickableSprites: Array<SpritePosition> = Util.array(10).map((x, i) => { return [i+1, 0] });
+    public static readonly sprites: Array<SpritePosition> = Util.spriteMap(0, 14, 7, 14);
+    public static readonly lockedSprites: Array<SpritePosition> = Util.spriteMap(7, 13, 13, 13);
+    public static readonly unclickableSprites: Array<SpritePosition> = Util.spriteMap(41, 12, 52, 12);
 
     constructor(contains: GameObject) {
         super();
         this.position = contains.getPosition();
         this.contains = contains;
-        this.spritePosition = Util.randItem(Wall.sprites);
-        this.lockedSpritePosition = Util.randItem(Wall.lockedSprites);
-        this.unclickableSpritePosition = Util.randItem(Wall.unclickableSprites);
+        this.sprite = Util.randItem(Wall.sprites);
+        this.lockedSprite = Util.randItem(Wall.lockedSprites);
+        this.unclickableSprite = Util.randItem(Wall.unclickableSprites);
     }
 
     public click() {
@@ -75,15 +75,15 @@ export class Wall extends GameObject {
     public getData() {
         const data: any = {
             type: "wall",
-            sprite: this.unclickableSpritePosition
+            sprite: this.unclickableSprite
         }
 
         if (this.clickable()) {
-            data.sprite = this.spritePosition;
+            data.sprite = this.sprite;
         }
 
         if (this.locked) {
-            data.sprite = this.lockedSpritePosition;
+            data.sprite = this.lockedSprite;
         }
 
         return data;

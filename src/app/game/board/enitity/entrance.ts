@@ -1,15 +1,15 @@
 import { GameObject, Position, SpritePosition } from "../object";
-import { Util } from "../../../util";
 import { Floor } from "../environment/floor";
 
 export class Entrance extends GameObject {
     protected position: Position;
-    protected spritePosition: SpritePosition;
+    protected sprite: SpritePosition = [42, 15];
+    private floor: Floor;
 
     constructor(pos: Position) {
         super();
         this.position = pos;
-        this.spritePosition = Util.randItem(Floor.sprites);
+        this.floor = new Floor(pos);
     }
 
     public click() { }
@@ -26,7 +26,8 @@ export class Entrance extends GameObject {
     public getData() {
         return {
             type: "entrance",
-            sprite: this.spritePosition
+            sprite: this.sprite,
+            layer: this.floor.getData()
         }
     }
 }

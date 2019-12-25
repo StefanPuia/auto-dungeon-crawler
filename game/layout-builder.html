@@ -1,0 +1,65 @@
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+
+<style>
+#board {
+    display: grid;
+    grid-template-rows: repeat(14, 20px);
+    grid-template-columns: repeat(10, 20px);
+    grid-gap: 2px;
+}
+
+.tile {
+    border: solid 1px black;
+}
+
+.tile.on {
+    background-color: blueviolet;
+}
+
+#out {
+    width: 400px;
+    height: 400px;
+}
+</style>
+
+<div id="board"></div>
+<br>
+<a href="javascript:reset()">Reset</a>
+<a href="javascript:generate()">Generate</a>
+<br>
+<textarea id="out"></textarea>
+    
+<script>
+for (let i = 0; i < 140; i++) {
+    $("#board").append($('<div class="tile"/>'));
+}
+
+$(".tile").click((e) => {
+    $(e.currentTarget).toggleClass("on");
+})
+
+function reset() {
+    $(".tile.on").removeClass("on");
+}
+
+function generate() {
+    let out = [];
+    let current = false;
+    k = 1;
+    $(".tile").each((i, e) => {
+        if (k === 1) {
+            current = [];
+            out.push(current);
+        }
+
+        current.push($(e).hasClass("on") ? 1 : 0);
+
+        k++;
+        if (k >= 11) {
+            k = 1;
+        }
+    })
+
+    $("#out").val(JSON.stringify(out).replace(/\],\[/g, "],\n["));
+}
+</script>

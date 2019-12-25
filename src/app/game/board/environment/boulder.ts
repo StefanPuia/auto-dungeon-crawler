@@ -3,14 +3,14 @@ import { Util } from "../../../util";
 
 export class Boulder extends GameObject {
     protected position: Position;
-    protected spritePosition: SpritePosition;
+    protected sprite: SpritePosition;
 
-    public static readonly sprites: Array<SpritePosition> = [[0, 15]];
+    public static readonly sprites: Array<SpritePosition> = Util.spriteMap(29, 13, 36, 13);
 
     constructor(pos: Position) {
         super();
         this.position = pos;
-        this.spritePosition = Util.randItem(Boulder.sprites);
+        this.sprite = Util.randItem(Boulder.sprites);
     }
 
     public click() { }
@@ -27,7 +27,7 @@ export class Boulder extends GameObject {
     public getData() {
         return {
             type: "boulder",
-            sprite: this.spritePosition
+            sprite: this.sprite
         }
     }
 }

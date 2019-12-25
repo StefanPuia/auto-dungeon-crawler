@@ -15,8 +15,9 @@ export class Monster extends GameObject {
     private health: number;
     private initiative: number;
     private loot: GameObject;
-    protected spritePosition: SpritePosition;
-    public static readonly sprites: Array<SpritePosition> = [[1, 3], [1, 2], [2, 1]];
+    private floor: Floor;
+    protected sprite: SpritePosition;
+    public static readonly sprites: Array<SpritePosition> = Util.spriteMap(0, 3, 63, 5);
 
     public constructor(position: Position);
     public constructor(position: Position, attack: number, health: number);
@@ -34,18 +35,19 @@ export class Monster extends GameObject {
         this.attack = attack;
         this.health = health;
         this.initiative = Util.randInt(Player.getInitiative() * 1.3, Player.getInitiative() * 0.7);
-        this.spritePosition = Util.randItem(Monster.sprites);
+        this.sprite = Util.randItem(Monster.sprites);
+        this.floor = new Floor(this.position);
 
         this.loot = Util.rollReward([{
             object: new Potion(this.position),
-            rate: 15
+            rate: 6
         }, {
             object: new Gold(this.position),
-            rate: 15
+            rate: 10
         }, {
             object: new Attack(this.position),
-            rate: 10
-        }], 100) || new Floor(this.position);
+            rate: 2
+        }], 100) || this.floor;
     }
 
     public onload() {
@@ -93,11 +95,12 @@ export class Monster extends GameObject {
     public getData() {
         return {
             type: "monster",
-            sprite: this.spritePosition,
+            sprite: this.sprite,
             extra: {
                 attack: this.attack,
                 health: this.health
-            }
+            },
+            layer: this.floor.getData()
         }
     }
 }

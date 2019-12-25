@@ -1,6 +1,6 @@
 export abstract class GameObject {
     protected abstract position: Position;
-    protected abstract spritePosition: SpritePosition;
+    protected abstract sprite: SpritePosition;
 
     abstract click(): void;
     abstract getDisplay(): string;

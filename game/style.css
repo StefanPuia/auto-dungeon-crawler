@@ -1,5 +1,5 @@
 :root {
-    --tile-size: 64px;
+    --tile-size: 32px;
     --tile-gap: 0;
 }
 
@@ -32,14 +32,14 @@ body {
     display: grid;
     grid-template-rows: auto var(--tile-size) 40px;
     grid-template-areas: "board""stats""button";
-    width: calc(calc(5 * var(--tile-size)) + calc(4 * var(--tile-gap)));
+    width: calc(calc(10 * var(--tile-size)) + calc(9 * var(--tile-gap)));
 }
 
 #board {
     grid-area: board;
     display: grid;
-    grid-template-columns: repeat(5, var(--tile-size));
-    grid-template-rows: repeat(7, var(--tile-size));
+    grid-template-columns: repeat(10, var(--tile-size));
+    grid-template-rows: repeat(14, var(--tile-size));
     grid-gap: var(--tile-gap);
 }
 
@@ -86,33 +86,14 @@ body {
 
 
 .boardTile {
-    display: flex;
+    display: block;
     width: var(--tile-size);
     height: var(--tile-size);
-    justify-content: center;
-    align-items: center;
     user-select: none;
     cursor: pointer;
-    font-size: 23px;
-}
-
-.boardTile.monster,
-.boardTile.gold,
-.boardTile.fountain,
-.boardTile.exit,
-.boardTile.attack,
-.boardTile.key,
-.boardTile.potion {
-    background-image: url("/tiles.jpg");
+    background-image: url("/tiles.png");
     position: relative;
-}
-
-.boardTile.entrance,
-.boardTile.wall,
-.boardTile.floor,
-.boardTile.boulder {
-    background-image: url("/tiles2.png");
-    background-size: 1024px 1024px;
+    z-index: 10;
 }
 
 .boardTile.potion,
@@ -128,6 +109,7 @@ body {
     justify-items: center;
     bottom: 0;
     position: absolute;
+    z-index: 20;
 }
 
 .monster .stats .attack {
@@ -136,4 +118,24 @@ body {
 
 .monster .stats .health {
     color: red;
+}
+
+.layer {
+    display: flex;
+    width: var(--tile-size);
+    height: var(--tile-size);
+    cursor: pointer;
+    background-image: url("/tiles.png");
+    position: relative;
+    z-index: 5;
+    left: 0;
+    top: 0;
+}
+
+.display {
+    position: absolute;
+    z-index: 20;
+    bottom: 1px;
+    right: 5px;
+    font-size: 18px;
 }

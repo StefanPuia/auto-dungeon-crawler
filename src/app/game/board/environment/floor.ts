@@ -3,14 +3,14 @@ import { Util } from "../../../util";
 
 export class Floor extends GameObject {
     protected position: Position;
-    protected spritePosition: SpritePosition;
+    protected sprite: SpritePosition;
 
-    public static readonly sprites: Array<SpritePosition> = [[7, 5], [8, 5], [9, 5]];
+    public static readonly sprites: Array<SpritePosition> = Util.spriteMap(25, 14, 34, 14)
 
     constructor(pos: Position) {
         super();
         this.position = pos;
-        this.spritePosition = Util.randItem(Floor.sprites);
+        this.sprite = Util.randItem(Floor.sprites);
     }
 
     public click() { }
@@ -27,7 +27,7 @@ export class Floor extends GameObject {
     public getData() {
         return {
             type: "floor",
-            sprite: this.spritePosition
+            sprite: this.sprite
         }
     }
 }

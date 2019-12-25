@@ -64,7 +64,7 @@ export class Game {
         }
 
         const monsters: Array<Monster> = [];
-        for (let i = 0; i < Util.randInt(10, 5); i++) {
+        for (let i = 0; i < Util.randInt(20, 10); i++) {
             const pos = Board.randomEmptyPosition();
             if (pos) {
                 Board.setObject(new Wall(new Monster(pos)));
@@ -77,13 +77,13 @@ export class Game {
         for (const pos of Board.emptyPositions()) {
             Board.setObject(new Wall(Util.rollReward([{
                 object: new Gold(pos),
-                rate: 10
+                rate: 6
             }, {
                 object: new Attack(pos),
-                rate: 10
+                rate: 2
             }, {
                 object: new Fountain(pos),
-                rate: 1
+                rate: 0.2
             }], 100) || new Floor(pos)));
         }
     }

@@ -1,30 +1,24 @@
 import { Position, SpritePosition } from "../object";
-import { Util } from "../../../util";
 import { Player } from "../../player";
 import { Game } from "../../game";
-import { Board } from "../../board";
-import { Floor } from "../environment/floor";
 import { Pickable } from "../pickable";
 
 export class Fountain extends Pickable {
     protected position: Position;
-    protected spritePosition: SpritePosition;
-
-    public static readonly sprites: Array<SpritePosition> = [[8, 5]];
+    protected sprite: SpritePosition = [20, 11];
 
     constructor(pos: Position) {
-        super();
+        super(pos);
         this.position = pos;
-        this.spritePosition = Util.randItem(Fountain.sprites);
     }
 
     public click() {
+        super.click();
         if (Player.getHealth() - Player.getBaseHealth()) {
             Player.setHealth(Player.getBaseHealth() + Game.getModifier() * 5)
         } else {
             Player.setHealth(Game.getModifier() * 23, 1)
         }
-        Board.setObject(new Floor(this.position));
     }
     public onload() { }
 
@@ -37,9 +31,9 @@ export class Fountain extends Pickable {
     }
 
     public getData() {
-        return {
+        return Object.assign(super.getData(), {
             type: "fountain",
-            sprite: this.spritePosition
-        }
+            sprite: this.sprite
+        });
     }
 }
