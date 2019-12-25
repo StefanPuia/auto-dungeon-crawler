@@ -4,12 +4,14 @@
   "description": "\"# auto-dungeon-crawler\"",
   "main": "index.js",
   "scripts": {
-    "debug": "nodemon --exec ts-node -- ./index.ts"
+    "debug": "nodemon --exec ts-node -- ./index.ts",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/express": "github:types/express",
+    "@types/node": "^13.1.0",
     "express": "^4.17.1",
     "tsc": "^1.20150623.0",
     "typescript": "^3.7.4"
