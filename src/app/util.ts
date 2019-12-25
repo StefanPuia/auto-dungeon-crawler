@@ -1,3 +1,5 @@
+import { GameObject } from "./game/board/object";
+
 export class Util {
     public static array(n: number) {
         const array = [];
@@ -17,7 +19,23 @@ export class Util {
         return a <= x && x <= b;
     }
 
-    public static randItem(array: Array<any>) {
+    public static randItem<T>(array: Array<T>): T {
         return array[this.randInt(array.length - 1)]
     }
+
+    public static rollReward(rewards: Array<RollReward>, max: number): GameObject | undefined {
+        const roll = Util.randInt(max);
+        let current = 0;
+        for (let reward of rewards) {
+            current += reward.rate;
+            if (roll <= current) {
+                return reward.object;
+            }
+        }
+    }
+}
+
+export type RollReward = {
+    object: GameObject,
+    rate: number
 }

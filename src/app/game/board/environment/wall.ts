@@ -45,6 +45,10 @@ export class Wall extends GameObject {
         return false;
     }
 
+    public getContains(): GameObject {
+        return this.contains;
+    }
+
     public getDisplay() {
         return "wall";
     }

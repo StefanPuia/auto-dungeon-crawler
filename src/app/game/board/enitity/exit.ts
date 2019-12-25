@@ -4,18 +4,23 @@ import { Game } from "../../game";
 
 export class Exit extends GameObject {
     protected position: Position;
-    protected spritePosition: SpritePosition;
-
-    public static readonly sprites: Array<SpritePosition> = [[7, 10]];
+    protected spritePosition: SpritePosition = [7, 10];
+    protected closedSpritePosition: SpritePosition = [8, 10];
+    private locked: boolean = true;
 
     constructor(pos: Position) {
         super();
         this.position = pos;
-        this.spritePosition = Util.randItem(Exit.sprites);
     }
 
     public click() {
-        Game.nextLevel();
+        if (!this.locked) {
+            Game.nextLevel();
+        }
+    }
+
+    public unlock() {
+        this.locked = false;
     }
 
     public onload() { }
@@ -31,7 +36,7 @@ export class Exit extends GameObject {
     public getData() {
         return {
             type: "exit",
-            sprite: this.spritePosition
+            sprite: this.locked ? this.closedSpritePosition : this.spritePosition
         }
     }
 }

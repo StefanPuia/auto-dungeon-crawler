@@ -14,6 +14,7 @@ export class Monster extends GameObject {
     private attack: number;
     private health: number;
     private initiative: number;
+    private loot: GameObject;
     protected spritePosition: SpritePosition;
     public static readonly sprites: Array<SpritePosition> = [[1, 3], [1, 2], [2, 1]];
 
@@ -33,7 +34,18 @@ export class Monster extends GameObject {
         this.attack = attack;
         this.health = health;
         this.initiative = Util.randInt(Player.getInitiative() * 1.3, Player.getInitiative() * 0.7);
-        this.spritePosition = Util.randItem(Monster.sprites)
+        this.spritePosition = Util.randItem(Monster.sprites);
+
+        this.loot = Util.rollReward([{
+            object: new Potion(this.position),
+            rate: 15
+        }, {
+            object: new Gold(this.position),
+            rate: 15
+        }, {
+            object: new Attack(this.position),
+            rate: 10
+        }], 100) || new Floor(this.position);
     }
 
     public onload() {
@@ -57,21 +69,17 @@ export class Monster extends GameObject {
 
     private checkDead() {
         if (this.health <= 0) {
-            if(Util.between(0, Util.randInt(100), 15)) {
-                Board.setObject(new Potion(this.position));
-            } else if(Util.between(16, Util.randInt(100), 30)) {
-                Board.setObject(new Gold(this.position));
-            } else if(Util.between(31, Util.randInt(100), 40)) {
-                Board.setObject(new Attack(this.position));
-            } else {
-                Board.setObject(new Floor(this.position));
-            }
+            Board.setObject(this.loot);
             Board.getSurrounding(this.position).forEach(obj => {
                 if (obj instanceof Wall) obj.unlock()
             })
             return true;
         }
         return false;
+    }
+
+    public overrideLoot(loot: GameObject) {
+        this.loot = loot;
     }
 
     public getDisplay() {

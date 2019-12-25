@@ -2,6 +2,7 @@ import { Position, GameObject } from "./board/object";
 import { Floor } from "./board/environment/floor";
 import { Util } from "../util";
 import { Boulder } from "./board/environment/boulder";
+import { Wall } from "./board/environment/wall";
 
 export class Board {
     private static instance: Board;
@@ -83,6 +84,25 @@ export class Board {
 
     public static getData(): any {
         return Board.get().objects.map(row => row.map(obj => obj.getData()));
+    }
+
+    public static getAt(position: Position): GameObject {
+        return Board.get().objects[position.x][position.y];
+    }
+
+    public static getAllItems<T>(constructor:{new (p: Position, ...x: any):T}, includeHidden: boolean): Array<T> {
+        const objects: Array<T> = [];
+        for(let i = 0; i < 7 * 5; i++) {
+            const obj = Board.getAt({x: Math.floor(i/5), y: i%5});
+            if (obj instanceof constructor) {
+                objects.push(obj);
+            } else if (obj instanceof Wall && includeHidden) {
+                if (obj.getContains() instanceof constructor) {
+                    objects.push(obj.getContains() as unknown as T);
+                }
+            }
+        }
+        return objects;
     }
 }
 

@@ -10,6 +10,7 @@ import { Fountain } from "./board/pickable/fountain";
 import { Exit } from "./board/enitity/exit";
 import { Entrance } from "./board/enitity/entrance";
 import { Attack } from "./board/pickable/attack";
+import { Key } from "./board/pickable/key";
 
 export class Game {
     private static instance: Game;
@@ -70,8 +71,11 @@ export class Game {
             }
         }
 
+        const keyMonster = Util.randItem(Board.getAllItems(Monster, true));
+        keyMonster.overrideLoot(new Key(keyMonster.getPosition()));
+
         for (const pos of Board.emptyPositions()) {
-            let pickups = [{
+            Board.setObject(new Wall(Util.rollReward([{
                 object: new Gold(pos),
                 rate: 10
             }, {
@@ -80,19 +84,7 @@ export class Game {
             }, {
                 object: new Fountain(pos),
                 rate: 1
-            }]
-            Board.setObject(new Wall(new Floor(pos)));
-
-            const roll = Util.randInt(100);
-            let current = 0;
-            for (let pickup of pickups) {
-                current += pickup.rate;
-                if (roll <= current) {
-                    Board.setObject(new Wall(pickup.object));
-                    break;
-                }
-                
-            }
+            }], 100) || new Floor(pos)));
         }
     }
 
@@ -110,7 +102,7 @@ export class Game {
             level: Game.get().level,
             modifier: Game.getModifier()
         };
-        if (Player.getHealth() === 0) {
+        if (Game.get().running && Player.getHealth() === 0) {
             gameData.message = "Game Over: You Died";
         }
         return gameData;

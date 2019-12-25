@@ -99,14 +99,15 @@ body {
 .boardTile.monster,
 .boardTile.gold,
 .boardTile.fountain,
-.boardTile.entrance,
 .boardTile.exit,
 .boardTile.attack,
+.boardTile.key,
 .boardTile.potion {
     background-image: url("/tiles.jpg");
     position: relative;
 }
 
+.boardTile.entrance,
 .boardTile.wall,
 .boardTile.floor,
 .boardTile.boulder {
