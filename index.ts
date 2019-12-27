@@ -13,6 +13,10 @@ app.use("*", (req: Request, res: Response, next: NextFunction) => {
     console.log(new Date(), req.method, req.originalUrl);
     next();
 })
+
+app.get("/stats", (req: Request, res: Response) => {
+    res.json(GameFactory.getStats());
+})
 app.use("/play/:game", express.static("game"));
 app.use("/game", gameController);
 
@@ -21,3 +25,8 @@ app.use("*", (req: Request, res: Response) => {
 })
 
 app.listen(8080, () => { console.log("listening") });
+
+setInterval(() => {
+    console.log("cleaning up");
+    GameFactory.cleanup(3600 * 1000);
+}, 3600 * 1000);

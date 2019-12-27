@@ -27,6 +27,7 @@ export class GameFactory {
         for(const key of Object.keys(this.instances)) {
             if (this.instances[key].access + t < now) {
                 delete this.instances[key];
+                console.log("deleted " + key);
             }
         }
     }
@@ -37,6 +38,19 @@ export class GameFactory {
 
     public static getAll() {
         return this.instances;
+    }
+
+    public static getStats() {
+        const stats = [];
+        for (const inst of Object.values(this.instances)) {
+            stats.push({
+                key: inst.key,
+                access: new Date(inst.access),
+                modifier: inst.instance.getModifier()
+            })
+        }
+
+        return stats;
     }
 }
 
